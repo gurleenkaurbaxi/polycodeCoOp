@@ -51,7 +51,7 @@ impl GroqClient {
 
     pub async fn suggest_fix(&self, prompt: String) -> Result<String> {
         const API_URL: &str = "https://api.groq.com/openai/v1/chat/completions";
-        const MODEL: &str = "llama-3.3-70b-versatile";
+        const MODEL: &str = "qwen/qwen3.8-27b";
 
         let body = ChatRequest {
             model: MODEL,

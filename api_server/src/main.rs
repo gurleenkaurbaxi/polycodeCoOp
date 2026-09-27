@@ -374,7 +374,7 @@ impl GroqClient {
         }
 
         let body = Req {
-            model: "llama-3.3-70b-versatile",
+            model: "qwen/qwen3.8-27b",
             max_tokens: 1024,
             messages: vec![Msg { role: "user", content: prompt }],
         };

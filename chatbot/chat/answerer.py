@@ -22,7 +22,7 @@ def get_answer(client: Groq, conversation: Conversation, user_message: str) -> s
 
     try:
         response = client.chat.completions.create(
-            model="llama-3.1-8b-instant",
+            model="qwen/qwen3.8-27b",
             max_tokens=1024,
             messages=messages,
         )

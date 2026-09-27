@@ -100,7 +100,7 @@ def main():
     service = OnDemandIREventStreamService()
     ir_events_pb2_grpc.add_IREventStreamServicer_to_server(service, server)
 
-    server.add_insecure_port(f'[::]:{grpc_port}')
+    server.add_insecure_port(f'0.0.0.0:{grpc_port}')
     server.start()
 
     print(f"[Integration Test V3] Server ready on http://127.0.0.1:{grpc_port}")

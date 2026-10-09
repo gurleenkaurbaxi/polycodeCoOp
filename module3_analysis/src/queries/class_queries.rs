@@ -32,11 +32,11 @@ mod tests {
         builder.set_current_file("shapes.py".to_string(), "python".to_string());
 
         builder
-            .process_class_declared("Shape".to_string(), vec![], 1, ts)
+            .process_class_declared("Shape".to_string(), vec![], 1, ts, vec![])
             .expect("declare Shape");
 
         builder
-            .process_class_declared("Circle".to_string(), vec!["Shape".to_string()], 10, ts)
+            .process_class_declared("Circle".to_string(), vec!["Shape".to_string()], 10, ts, vec![])
             .expect("declare Circle");
 
         builder.into_graph()

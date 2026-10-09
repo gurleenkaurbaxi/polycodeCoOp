@@ -105,7 +105,7 @@ mod tests {
     fn test_file_with_no_imports_returns_empty() {
         let mut builder = GraphBuilder::new();
         builder.set_current_file("bare.py".to_string(), "python".to_string());
-        builder.process_function_declared("run".to_string(), 0, 1, None, 0).unwrap();
+        builder.process_function_declared("run".to_string(), 0, 1, None, 0, vec![]).unwrap();
         let graph = builder.into_graph();
 
         let query = GraphQuery::new(&graph);

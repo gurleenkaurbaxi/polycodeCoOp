@@ -183,13 +183,13 @@ mod tests {
             .unwrap();
 
         builder
-            .process_function_declared("hash_password".to_string(), 1, 3, None, ts)
+            .process_function_declared("hash_password".to_string(), 1, 3, None, ts, vec![])
             .unwrap();
         builder
-            .process_function_declared("login".to_string(), 2, 8, None, ts)
+            .process_function_declared("login".to_string(), 2, 8, None, ts, vec![])
             .unwrap();
         builder
-            .process_function_declared("orphan".to_string(), 0, 15, None, ts)
+            .process_function_declared("orphan".to_string(), 0, 15, None, ts, vec![])
             .unwrap();
 
         builder

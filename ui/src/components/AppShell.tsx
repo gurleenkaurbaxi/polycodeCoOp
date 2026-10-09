@@ -2,7 +2,7 @@ import { useState } from "react";
 import MainPanel from "./MainPanel";
 import CodeInputPanel from "./CodeInputPanel";
 import LandingPage from "./LandingPage";
-import ChatBox from "./ChatBox";
+// import ChatBox from "./ChatBox";  // chat panel disabled below
 import type { AnalysisResult } from "../types";
 
 export default function AppShell() {

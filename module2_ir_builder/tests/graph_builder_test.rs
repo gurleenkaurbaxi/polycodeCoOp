@@ -16,6 +16,7 @@ fn test_basic_function_declaration() {
             10,               // line_number
             None,             // parent_scope
             1700000000,       // timestamp
+            vec![],          // decorators
         )
         .expect("Failed to process function declaration");
 
@@ -46,6 +47,7 @@ fn test_function_call_relationship() {
             10,
             None,
             1700000000,
+            vec![],          // decorators
         )
         .expect("Failed to declare caller");
 
@@ -56,6 +58,7 @@ fn test_function_call_relationship() {
             20,
             None,
             1700000000,
+            vec![],          // decorators
         )
         .expect("Failed to declare callee");
 
@@ -97,6 +100,7 @@ fn test_class_inheritance() {
             vec![],
             10,
             1700000000,
+            vec![],          // decorators
         )
         .expect("Failed to declare base class");
 
@@ -107,6 +111,7 @@ fn test_class_inheritance() {
             vec!["BaseClass".to_string()],
             20,
             1700000000,
+            vec![],          // decorators
         )
         .expect("Failed to declare derived class");
 
@@ -161,6 +166,7 @@ fn test_unused_function_detection() {
             10,
             None,
             1700000000,
+            vec![],          // decorators
         )
         .expect("Failed to declare unused function");
 
@@ -172,6 +178,7 @@ fn test_unused_function_detection() {
             20,
             None,
             1700000000,
+            vec![],          // decorators
         )
         .expect("Failed to declare main");
 
@@ -182,6 +189,7 @@ fn test_unused_function_detection() {
             30,
             None,
             1700000000,
+            vec![],          // decorators
         )
         .expect("Failed to declare helper");
 
@@ -202,11 +210,11 @@ fn test_unused_function_detection() {
     let query = GraphQuery::new(graph);
     let unused = query.find_unused_functions("test.py");
 
-    // Should find 2 unused functions: "unused_helper" and "main"
-    // (main is unused because nothing calls it)
-    assert_eq!(unused.len(), 2);
+    // Only "unused_helper" is unused: "helper" is called by "main", and
+    // "main" is an entry point, so it is never reported as dead code
+    assert_eq!(unused.len(), 1);
     assert!(unused.iter().any(|f| f.name == "unused_helper"));
-    assert!(unused.iter().any(|f| f.name == "main"));
+    assert!(!unused.iter().any(|f| f.name == "main"));
 }
 
 #[test]
@@ -222,6 +230,7 @@ fn test_incremental_update() {
             10,
             None,
             1700000000,
+            vec![],          // decorators
         )
         .expect("Failed to declare function");
 
@@ -245,6 +254,7 @@ fn test_incremental_update() {
             10,
             None,
             1700000001,
+            vec![],          // decorators
         )
         .expect("Failed to declare new function");
 

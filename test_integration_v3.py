@@ -44,7 +44,7 @@ class OnDemandIREventStreamService(ir_events_pb2_grpc.IREventStreamServicer):
         try:
             # Extract facts from the file using Module 1's parser
             parser = get_parser(language=language, file_path=file_path)
-            with open(file_path, 'r') as f:
+            with open(file_path, 'r', encoding='utf-8', errors='replace') as f:
                 content = f.read()
             facts = parser.parse(content, file_path)
             print(f"[Transport] Extracted {len(facts)} facts, streaming...")

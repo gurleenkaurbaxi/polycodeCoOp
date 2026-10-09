@@ -1454,12 +1454,9 @@ class TreeSitterParser(BaseParser):
             # Core
             "method": self._handle_method_ruby,
             "singleton_method": self._handle_method_ruby,
-            "call": self._handle_call_ruby,
+            "call": self._handle_call_or_require_ruby,  # require is also a call
             "return": self._handle_return_ruby,
-            
-            # Imports
-            "call": self._handle_require_ruby,  # require is a call
-            
+
             # Classes and Modules
             "class": self._handle_class_ruby,
             "module": self._handle_module_ruby,
@@ -1545,6 +1542,10 @@ class TreeSitterParser(BaseParser):
             "function_name": scope,
             "has_value": has_value
         }, node.start_point[0] + 1)
+
+    def _handle_call_or_require_ruby(self, node, source: str, scope: str) -> IRFact:
+        # require/require_relative become imports; everything else is a regular call
+        return self._handle_require_ruby(node, source, scope) or self._handle_call_ruby(node, source, scope)
 
     def _handle_require_ruby(self, node, source: str, scope: str) -> IRFact:
         # Check if this is a require/require_relative call

@@ -39,7 +39,6 @@ export default function AnalysisOutput({ ir }: { ir: IRGraph }) {
   const functions = ir.nodes.filter(n => "Function" in n.node_type);
 
   const callEdges   = ir.edges.filter(e => typeof e.edge_type === "object" && e.edge_type !== null && "Calls" in (e.edge_type as object));
-  const memberEdges = ir.edges.filter(e => e.edge_type === "HasMember" || (typeof e.edge_type === "object" && e.edge_type !== null && "HasMember" in (e.edge_type as object)));
   const calledIds   = new Set(callEdges.map(e => e.to));
   const unusedFns   = functions.filter(fn => !calledIds.has(fn.id));
 

@@ -87,9 +87,9 @@ mod tests {
 
         builder.set_current_file("main.py".to_string(), "python".to_string());
 
-        builder.process_function_declared("helper".to_string(), 0, 1, None, ts).unwrap();
-        builder.process_function_declared("process".to_string(), 0, 5, None, ts).unwrap();
-        builder.process_function_declared("entry".to_string(), 0, 10, None, ts).unwrap();
+        builder.process_function_declared("helper".to_string(), 0, 1, None, ts, vec![]).unwrap();
+        builder.process_function_declared("process".to_string(), 0, 5, None, ts, vec![]).unwrap();
+        builder.process_function_declared("entry".to_string(), 0, 10, None, ts, vec![]).unwrap();
 
         builder.process_function_call(Some("process".to_string()), "helper".to_string(), 0, 6).unwrap();
         builder.process_function_call(Some("entry".to_string()), "process".to_string(), 0, 11).unwrap();

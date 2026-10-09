@@ -150,7 +150,8 @@ function buildScopeGraph(ir: IRGraph, selectedPath: string, showAll: boolean) {
   const inEdges  = callEdges.filter(e => nodeById.get(e.from)?.metadata.file_path !== selectedPath && homeIds.has(e.to));
 
   const extIds   = new Set([...outEdges.map(e => e.to), ...inEdges.map(e => e.from)]);
-  const extNodes = [...extIds].map(id => nodeById.get(id)).filter((n): n is IRNode => !!n);
+  const extNodes = [...extIds].map(id => nodeById.get(id))
+    .filter((n): n is IRNode => !!n && !SKIP.has(Object.keys(n.node_type)[0]));
   const extFiles = [...new Set(extNodes.map(n => n.metadata.file_path))];
   const fileColor = new Map(extFiles.map((fp, i) => [fp, FILE_PALETTE[i % FILE_PALETTE.length]]));
 
@@ -178,14 +179,13 @@ function buildScopeGraph(ir: IRGraph, selectedPath: string, showAll: boolean) {
     els.push({ data: { id: n.id, label: raw, kind: `Ext_${k}`, parent: `ext-${fp}`, fileColor: fileColor.get(fp) ?? "#617891" } });
   }
 
-  // edges
+  // edges — only between nodes actually drawn (Cytoscape throws on dangling ends)
+  const drawnIds = new Set(els.map(el => el.data.id));
   const seen = new Set<string>();
   for (const e of [...outEdges, ...inEdges]) {
     const key = `${e.from}→${e.to}`;
     if (seen.has(key)) continue; seen.add(key);
-    const fk = Object.keys(nodeById.get(e.from)?.node_type ?? {})[0];
-    const tk = Object.keys(nodeById.get(e.to)?.node_type ?? {})[0];
-    if (["Variable","Lambda"].includes(fk) || ["Variable","Lambda"].includes(tk)) continue;
+    if (!drawnIds.has(e.from) || !drawnIds.has(e.to)) continue;
     els.push({ data: { id: `se-${key}`, source: e.from, target: e.to, kind: outEdges.includes(e) ? "OutCall" : "InCall" } });
   }
 
@@ -235,7 +235,7 @@ export default function DependencyGraph({ ir }: { ir: IRGraph }) {
   };
 
   // ── stylesheets ──────────────────────────────────────────────────────────────
-  const connStyle: cytoscape.Stylesheet[] = [
+  const connStyle = [
     { selector: "node[kind='FileNode']", style: { shape: "roundrectangle", label: "data(label)", "font-family": "ui-monospace,monospace", "font-size": "13px", "font-weight": "600", "text-valign": "center" as const, "text-halign": "center" as const, color: "#e8dcc8", "background-color": "#121e30", "border-width": 2, "border-color": "#D5B893", "border-opacity": 0.65, width: 160, height: 52, "text-wrap": "ellipsis", "text-max-width": "140px" } as any },
     { selector: "node[?unusedCount]", style: { "border-color": "#c46a82", "border-opacity": 0.9, "border-width": 2.5 } as any },
     { selector: "edge[kind='FileEdge']", style: { label: "data(label)", "font-size": "11px", "font-weight": "700", color: "#e8c87a", "text-background-color": "#080e18", "text-background-opacity": 0.92, "text-background-shape": "roundrectangle", "text-background-padding": "4px", "line-color": "#e8c87a", "target-arrow-color": "#e8c87a", "target-arrow-shape": "triangle", "arrow-scale": 1.5, "curve-style": "bezier", width: 2.5, opacity: 0.9 } as any },
@@ -244,7 +244,7 @@ export default function DependencyGraph({ ir }: { ir: IRGraph }) {
     { selector: ".highlighted", style: { opacity: 1 } as any },
   ];
 
-  const scopeStyle: cytoscape.Stylesheet[] = [
+  const scopeStyle = [
     { selector: "node[kind='HomeContainer']", style: { shape: "roundrectangle", label: "data(label)", "font-size": "13px", "font-weight": "800", "text-valign": "top" as const, "text-margin-y": -6, color: "#D5B893", "text-background-color": "#050d18", "text-background-opacity": 0.95, "text-background-shape": "roundrectangle", "text-background-padding": "5px", "background-color": "#0a1830", "background-opacity": 0.7, "border-style": "solid", "border-color": "#D5B893", "border-width": 2, padding: "32px" } as any },
     { selector: "node[kind='ExtContainer']", style: { shape: "roundrectangle", label: "data(label)", "font-size": "11px", "font-weight": "700", "text-valign": "top" as const, "text-margin-y": -6, color: "data(fileColor)", "text-background-color": "#050d18", "text-background-opacity": 0.95, "text-background-shape": "roundrectangle", "text-background-padding": "4px", "background-color": "#0a1020", "background-opacity": 0.6, "border-style": "dashed", "border-color": "data(fileColor)", "border-width": 1.5, "border-opacity": 0.6, padding: "28px" } as any },
     { selector: 'node[kind="Function"][used="yes"]', style: { shape: "roundrectangle", label: "data(label)", "font-size": "11px", "font-weight": "600", "text-valign": "center" as const, "text-halign": "center" as const, color: "#0f0a12", "background-color": "#c46a82", "border-width": 0, width: "label", height: "label", padding: "7px 12px" } as any },

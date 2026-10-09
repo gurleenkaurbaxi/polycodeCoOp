@@ -93,9 +93,9 @@ mod tests {
 
         builder.set_current_file("chain.py".to_string(), "python".to_string());
 
-        builder.process_function_declared("target".to_string(), 0, 1, None, ts).unwrap();
-        builder.process_function_declared("parent".to_string(), 0, 5, None, ts).unwrap();
-        builder.process_function_declared("grandparent".to_string(), 0, 10, None, ts).unwrap();
+        builder.process_function_declared("target".to_string(), 0, 1, None, ts, vec![]).unwrap();
+        builder.process_function_declared("parent".to_string(), 0, 5, None, ts, vec![]).unwrap();
+        builder.process_function_declared("grandparent".to_string(), 0, 10, None, ts, vec![]).unwrap();
 
         // parent calls target
         builder
@@ -118,8 +118,8 @@ mod tests {
 
         builder.set_current_file("cyclic.py".to_string(), "python".to_string());
 
-        builder.process_function_declared("a".to_string(), 0, 1, None, ts).unwrap();
-        builder.process_function_declared("b".to_string(), 0, 5, None, ts).unwrap();
+        builder.process_function_declared("a".to_string(), 0, 1, None, ts, vec![]).unwrap();
+        builder.process_function_declared("b".to_string(), 0, 5, None, ts, vec![]).unwrap();
 
         builder
             .process_function_call(Some("a".to_string()), "b".to_string(), 0, 2)
@@ -137,7 +137,7 @@ mod tests {
         let mut builder = GraphBuilder::new();
 
         builder.set_current_file("island.py".to_string(), "python".to_string());
-        builder.process_function_declared("alone".to_string(), 0, 1, None, 0).unwrap();
+        builder.process_function_declared("alone".to_string(), 0, 1, None, 0, vec![]).unwrap();
 
         builder.into_graph()
     }

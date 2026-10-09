@@ -37,10 +37,10 @@ mod tests {
         builder.set_current_file("app.py".to_string(), "python".to_string());
 
         // `used` is called by `entry` — so `used` has an incoming Calls edge
-        builder.process_function_declared("used".to_string(), 0, 1, None, ts).unwrap();
-        builder.process_function_declared("entry".to_string(), 0, 5, None, ts).unwrap();
+        builder.process_function_declared("used".to_string(), 0, 1, None, ts, vec![]).unwrap();
+        builder.process_function_declared("entry".to_string(), 0, 5, None, ts, vec![]).unwrap();
         // `orphan` is declared but never called
-        builder.process_function_declared("orphan".to_string(), 0, 10, None, ts).unwrap();
+        builder.process_function_declared("orphan".to_string(), 0, 10, None, ts, vec![]).unwrap();
 
         builder.process_function_call(Some("entry".to_string()), "used".to_string(), 0, 6).unwrap();
         builder.resolve_pending_calls().unwrap();

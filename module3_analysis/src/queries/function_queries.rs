@@ -52,11 +52,11 @@ mod tests {
         builder.set_current_file("test.py".to_string(), "python".to_string());
 
         builder
-            .process_function_declared("callee".to_string(), 0, 1, None, ts)
+            .process_function_declared("callee".to_string(), 0, 1, None, ts, vec![])
             .expect("declare callee");
 
         builder
-            .process_function_declared("caller".to_string(), 0, 5, None, ts)
+            .process_function_declared("caller".to_string(), 0, 5, None, ts, vec![])
             .expect("declare caller");
 
         builder

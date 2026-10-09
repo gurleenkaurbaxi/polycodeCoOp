@@ -22,6 +22,7 @@ fn build_test_graph() -> GraphBuilder {
         10,
         None,
         1700000000,
+        vec![],          // decorators
     ).unwrap();
 
     builder.process_function_declared(
@@ -30,6 +31,7 @@ fn build_test_graph() -> GraphBuilder {
         20,
         None,
         1700000000,
+        vec![],          // decorators
     ).unwrap();
 
     builder.process_function_declared(
@@ -38,6 +40,7 @@ fn build_test_graph() -> GraphBuilder {
         30,
         None,
         1700000000,
+        vec![],          // decorators
     ).unwrap();
 
     // Add function calls to create the call graph
@@ -143,6 +146,7 @@ fn test_multi_file_graph() {
         10,
         None,
         1700000000,
+        vec![],          // decorators
     ).unwrap();
 
     builder.process_function_declared(
@@ -151,6 +155,7 @@ fn test_multi_file_graph() {
         20,
         None,
         1700000000,
+        vec![],          // decorators
     ).unwrap();
 
     builder.process_function_call(
@@ -170,6 +175,7 @@ fn test_multi_file_graph() {
         10,
         None,
         1700000000,
+        vec![],          // decorators
     ).unwrap();
 
     // Get statistics
@@ -202,6 +208,7 @@ fn test_incremental_update_scenario() {
         10,
         None,
         1700000000,
+        vec![],          // decorators
     ).unwrap();
 
     let query1 = GraphQuery::new(builder.graph());
@@ -222,6 +229,7 @@ fn test_incremental_update_scenario() {
         10,
         None,
         1700000001,
+        vec![],          // decorators
     ).unwrap();
 
     builder.process_function_declared(
@@ -230,6 +238,7 @@ fn test_incremental_update_scenario() {
         20,
         None,
         1700000001,
+        vec![],          // decorators
     ).unwrap();
 
     builder.process_function_call(
@@ -265,17 +274,20 @@ fn test_all_event_types_accepted() {
 
     // 1. FunctionDeclared
     builder.process_function_declared(
-        "main".to_string(), 0, 1, None, 1700000000
+        "main".to_string(), 0, 1, None, 1700000000,
+        vec![],          // decorators
     ).unwrap();
 
     // 2. AsyncFunctionDeclared
     builder.process_async_function_declared(
-        "async_main".to_string(), 0, 2, None, 1700000000
+        "async_main".to_string(), 0, 2, None, 1700000000,
+        vec![],          // decorators
     ).unwrap();
 
     // 3. ClassDeclared
     builder.process_class_declared(
-        "MyClass".to_string(), vec![], 3, 1700000000
+        "MyClass".to_string(), vec![], 3, 1700000000,
+        vec![],          // decorators
     ).unwrap();
 
     // 4. FunctionCall
